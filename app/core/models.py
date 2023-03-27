@@ -33,7 +33,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=255)
     # birth_date = models.DateField(null=False)
     # user_name = models.CharField(max_length=255, unique=True)
-    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, null=False)
+    gender = models.CharField(max_length=10,
+                              choices=GENDER_CHOICES, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
