@@ -31,3 +31,8 @@ class ModelTests(TestCase):
         for email, expected in sample_emails:
             user = get_user_model().objects.create_user(email, 'sample123')
             self.assertEqual(user.email, expected)
+
+    def test_raise_error_when_email_is_blank(self):
+        """Test raise error when email is blank"""
+        with self.assertRaises(ValueError):
+            get_user_model().objects.create_user('', 'test123')
