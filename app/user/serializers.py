@@ -20,10 +20,10 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True,
                          'min_length': 5,
-                         'validators': [RegexValidator(regex=r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$',
-                                                       message='Password must contain at least one '\
-                                                               'single-byte lowercase, upercase and numeric '\
-                                                               'character. Total length should be more than 5 chars!')]}
+                         'validators': [RegexValidator(regex=r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$', # noqa
+                                                       message='Password must contain at least one ' # noqa
+                                                               'single-byte lowercase, upercase and numeric ' # noqa
+                                                               'character. Total length should be more than 5 chars!')]} # noqa
         }
 
     def create(self, validated_data):
