@@ -243,11 +243,11 @@ class PrivateUserApiTests(TestCase):
 
     def setUp(self):
         self.user = create_user(
-            email = 'test@example.com',
-            password = 'tesTpas123',
-            first_name = 'Taro',
-            last_name = 'Test',
-            gender = 'male'
+            email='test@example.com',
+            password='tesTpas123',
+            first_name='Taro',
+            last_name='Test',
+            gender='male'
         )
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
@@ -280,4 +280,3 @@ class PrivateUserApiTests(TestCase):
         self.assertEqual(self.user.first_name, payload['first_name'])
         self.assertTrue(self.user.check_password(payload['password']))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-
