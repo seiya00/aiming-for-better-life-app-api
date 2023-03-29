@@ -76,7 +76,7 @@ class PublicUserApiTests(TestCase):
         self.assertFalse(user_exists)
 
     def test_password_not_included_uppercase(self):
-        """Test an error is returned if password doesn't include uppercase letter"""
+        """Test error returned if password doesn't include uppercase"""
         payload = {
             'email': 'test@example.com',
             'password': 'testpass123',
@@ -94,7 +94,7 @@ class PublicUserApiTests(TestCase):
         self.assertFalse(user_exists)
 
     def test_password_not_included_number(self):
-        """Test an error is returned if password doesn't include uppercase letter"""
+        """Test error returned if password doesn't include number"""
         payload = {
             'email': 'test@example.com',
             'password': 'tesTpass',

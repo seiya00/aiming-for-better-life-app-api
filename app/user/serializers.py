@@ -21,8 +21,9 @@ class UserSerializer(serializers.ModelSerializer):
             'password': {'write_only': True,
                          'min_length': 5,
                          'validators': [RegexValidator(regex=r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$',
-                                                       message='Password must contain at least one single-byte lowercase, ' \
-                                                               'upercase and numeric character. Total length should be more than 5 chars!')]}
+                                                       message='Password must contain at least one '\
+                                                               'single-byte lowercase, upercase and numeric '\
+                                                               'character. Total length should be more than 5 chars!')]}
         }
 
     def create(self, validated_data):
@@ -39,6 +40,7 @@ class UserSerializer(serializers.ModelSerializer):
             user.save()
 
         return user
+
 
 class AuthTokenSerializer(serializers.Serializer):
     """Serializer for the user auth token"""
@@ -63,4 +65,3 @@ class AuthTokenSerializer(serializers.Serializer):
 
         attributes['user'] = user
         return attributes
-
