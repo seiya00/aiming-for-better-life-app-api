@@ -4,17 +4,20 @@ Test for models
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
+from core import models
+
 
 class ModelTests(TestCase):
     """Test models"""
 
+    # Test User Model
     def test_create_user_with_email_successful(self):
         """Test creating a user with an email is successful"""
         email = 'test@example.com'
         password = 'testpassword123'
         user = get_user_model().objects.create_user(
             email=email,
-            password=password
+            password=password,
         )
 
         self.assertEqual(user.email, email)
@@ -46,3 +49,15 @@ class ModelTests(TestCase):
 
         self.assertTrue(user.is_superuser)
         self.assertTrue(user.is_staff)
+
+    # Test Meal Model
+    def test_create_meal(self):
+        """Test creating a Meal is successful"""
+        user = get_user_model().objects.create_user(
+            'test@example.com',
+            'tesTpass123'
+        )
+        meal = models.Meal.objects.create(
+            user=user,
+
+        )

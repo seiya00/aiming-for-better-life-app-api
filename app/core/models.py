@@ -1,6 +1,7 @@
 """
 Database model
 """
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -54,3 +55,37 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
+
+
+# class Home(models.Model):
+#     """Home object"""
+#     pass
+
+
+# class Meal(models.Model):
+#     """Meal object"""
+#     pass
+
+
+# class MealQuestion(models.Model):
+#     """Meal questions object"""
+#     pass
+
+
+# class Vegetable(models.Model):
+#     """Vegetable object"""
+#     pass
+
+
+# class VegetableQuestion(models.Model):
+#     """Vegetable questions object"""
+
+
+# class Sleep(models.Model):
+#     """Sleep object"""
+#     pass
+
+
+# class SleepQuestion(models.Model):
+#     """Sleep questions object"""
+#     pass
