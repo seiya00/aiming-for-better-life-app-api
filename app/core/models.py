@@ -8,6 +8,9 @@ from django.contrib.auth.models import (
     BaseUserManager,
     PermissionsMixin
 )
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+
 
 
 class UserManager(BaseUserManager):
@@ -45,8 +48,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=255)
     # birth_date = models.DateField(null=False)
     # user_name = models.CharField(max_length=255, unique=True)
-    gender = models.CharField(max_length=10,
-                              choices=GENDER_CHOICES, null=False)
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -62,9 +64,27 @@ class User(AbstractBaseUser, PermissionsMixin):
 #     pass
 
 
-# class Meal(models.Model):
-#     """Meal object"""
-#     pass
+class Meal(models.Model):
+    """Meal object"""
+    HOW_MANY_CHOICES = [
+        ('none', '無し'),
+        ('a bit', '少し'),
+        ('normal', '普通'),
+        ('a lot', 'たくさん')
+    ]
+    user= models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    processed_food = models.CharField(max_length=10,
+                                      choices=HOW_MANY_CHOICES)
+    fried_food = models.CharField(max_length=10, choices=HOW_MANY_CHOICES)
+    could_control_appetite = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.processed_food
+
+
 
 
 # class MealQuestion(models.Model):

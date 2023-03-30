@@ -59,5 +59,9 @@ class ModelTests(TestCase):
         )
         meal = models.Meal.objects.create(
             user=user,
-
+            processed_food='none',
+            fired_food='none',
+            could_control_appetite='True'
         )
+
+        self.assertEqual(str(meal), meal.processed_food)
