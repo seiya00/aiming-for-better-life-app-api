@@ -67,7 +67,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 class MealQuestion(models.Model):
     """Meal questions object"""
     question = models.CharField(max_length=255, unique=True)
-    as_usual = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -107,10 +106,12 @@ class Meal(models.Model):
         null=True
     )
     is_allergy = models.BooleanField(default=False)
+    as_usual = models.BooleanField(default=False)
     answer_type = models.CharField(max_length=255) # フロントエンドで回答を送る時に裏で回答の種類を送信
     answer_choice = models.CharField(max_length=10, choices=HOW_MANY_CHOICES, null=True)
     answer_int = models.IntegerField(null=True)
     answer_bool = models.BooleanField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.answer_choice
