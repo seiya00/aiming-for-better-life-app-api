@@ -67,6 +67,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 class MealQuestion(models.Model):
     """Meal questions object"""
     question = models.CharField(max_length=255, unique=True)
+    as_usual = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
