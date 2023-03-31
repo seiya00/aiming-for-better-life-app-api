@@ -41,7 +41,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     GENDER_CHOICES = [
         ('male', '男性'),
         ('female', '女性'),
-        ('other', 'その他')
+        ('other', '回答なし')
     ]
     email = models.EmailField(max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
@@ -64,6 +64,25 @@ class User(AbstractBaseUser, PermissionsMixin):
 #     pass
 
 
+class MealQuestion(models.Model):
+    """Meal questions object"""
+    question = models.CharField(max_length=255, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.question
+
+
+class Vegetable(models.Model):
+    """Vegetable object"""
+    vegetable = models.CharField(max_length=255, unique=True)
+    color = models.CharField(max_length=255)
+    varieties = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.vegetable
+
+
 class Meal(models.Model):
     """Meal object"""
     HOW_MANY_CHOICES = [
@@ -72,33 +91,28 @@ class Meal(models.Model):
         ('normal', '普通'),
         ('a lot', 'たくさん')
     ]
-    user= models.ForeignKey(
+    user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
     )
-    processed_food = models.CharField(max_length=10,
-                                      choices=HOW_MANY_CHOICES)
-    fried_food = models.CharField(max_length=10, choices=HOW_MANY_CHOICES)
-    could_control_appetite = models.BooleanField(default=False)
+    meal_question = models.ForeignKey(
+        MealQuestion,
+        on_delete=models.CASCADE,
+        null=True
+    )
+    vegetable_question = models.ForeignKey(
+        Vegetable,
+        on_delete=models.CASCADE,
+        null=True
+    )
+    is_allergy = models.BooleanField(default=False)
+    answer_type = models.CharField(max_length=255) # フロントエンドで回答を送る時に裏で回答の種類を送信
+    answer_choice = models.CharField(max_length=10, choices=HOW_MANY_CHOICES, null=True)
+    answer_int = models.IntegerField(null=True)
+    answer_bool = models.BooleanField(null=True)
 
     def __str__(self):
-        return self.processed_food
-
-
-
-
-# class MealQuestion(models.Model):
-#     """Meal questions object"""
-#     pass
-
-
-# class Vegetable(models.Model):
-#     """Vegetable object"""
-#     pass
-
-
-# class VegetableQuestion(models.Model):
-#     """Vegetable questions object"""
+        return self.answer_choice
 
 
 # class Sleep(models.Model):

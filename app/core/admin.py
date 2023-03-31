@@ -48,4 +48,6 @@ class UserAdmin(BaseUserAdmin):
     )
 
 admin.site.register(models.User, UserAdmin)
+admin.site.register(models.MealQuestion)
+admin.site.register(models.Vegetable)
 admin.site.register(models.Meal)

@@ -50,18 +50,39 @@ class ModelTests(TestCase):
         self.assertTrue(user.is_superuser)
         self.assertTrue(user.is_staff)
 
-    # Test Meal Model
+    # Test models about Meal
+    def test_create_meal_question(self):
+        """Test creating a MealQuestion is successful"""
+        meal_question = models.MealQuestion.objects.create(
+            question='How many processed food did you ate yesterday'
+        )
+
+        self.assertEqual(str(meal_question), meal_question.question)
+
+    def test_create_vegetable(self):
+        """Test creating vegetable is successful"""
+        vegetable = models.Vegetable.objects.create(
+            vegetable='トマト',
+            color='赤',
+            varieties='果菜類'
+        )
+
+        self.assertEqual(str(vegetable), vegetable.vegetable)
+
     def test_create_meal(self):
-        """Test creating a Meal is successful"""
+        """Test creating Meal is successful"""
         user = get_user_model().objects.create_user(
             'test@example.com',
             'tesTpass123'
         )
+        meal_question = models.MealQuestion.objects.create(
+            question='How many processed food did you ate yesterday'
+        )
         meal = models.Meal.objects.create(
             user=user,
-            processed_food='none',
-            fired_food='none',
-            could_control_appetite='True'
+            meal_question=meal_question,
+            answer_type='choice',
+            answer_choice='none'
         )
 
-        self.assertEqual(str(meal), meal.processed_food)
+        self.assertEqual(str(meal), meal.answer_choice)
