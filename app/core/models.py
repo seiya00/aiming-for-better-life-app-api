@@ -64,7 +64,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 #     pass
 
 
-class MealQuestion(models.Model):
+class MealQuestion(models.Model): # Meal
     """Meal questions object"""
     question = models.CharField(max_length=255, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -73,7 +73,7 @@ class MealQuestion(models.Model):
         return self.question
 
 
-class Vegetable(models.Model):
+class MealVegetable(models.Model):
     """Vegetable object"""
     vegetable = models.CharField(max_length=255, unique=True)
     color = models.CharField(max_length=255)
@@ -83,7 +83,7 @@ class Vegetable(models.Model):
         return self.vegetable
 
 
-class Meal(models.Model):
+class MealUser(models.Model):
     """Meal object"""
     HOW_MANY_CHOICES = [
         ('none', '無し'),
@@ -101,12 +101,12 @@ class Meal(models.Model):
         null=True
     )
     vegetable_question = models.ForeignKey(
-        Vegetable,
+        MealVegetable,
         on_delete=models.CASCADE,
         null=True
     )
     is_allergy = models.BooleanField(default=False)
-    as_usual = models.BooleanField(default=False)
+    is_unnecessary = models.BooleanField(default=False)
     answer_type = models.CharField(max_length=255) # フロントエンドで回答を送る時に裏で回答の種類を送信
     answer_choice = models.CharField(max_length=10, choices=HOW_MANY_CHOICES, null=True)
     answer_int = models.IntegerField(null=True)
