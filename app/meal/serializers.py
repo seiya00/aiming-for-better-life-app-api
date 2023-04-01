@@ -11,15 +11,13 @@ class MealQuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MealQuestion
-        fields = ['id',
-                  'is_allergy',
-                  'is_unnecessary',
-                  'answer_type',
-                  'answer_choice',
-                  'answer_int',
-                  'answer_bool'
+        fields = [
+            'id',
+            'question',
+            'created_at'
         ]
-        read_only_fields = ['id']
+
+        read_only_fields = ['id', 'question', 'created_at']
 
 
 class MealUserSerializer(serializers.ModelSerializer):
@@ -29,9 +27,16 @@ class MealUserSerializer(serializers.ModelSerializer):
         model = MealUser
         fields = [
             'id',
-            'is_allergy',
-            'is_unnecessary',
+            'meal_question',
             'answer_type',
+            'answer_choice',
+            'answer_int',
+            'answer_bool'
+        ]
+
+        read_only_fields = [
+            'id',
+            'meal_question',
             'answer_choice',
             'answer_int',
             'answer_bool'
