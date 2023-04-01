@@ -20,3 +20,19 @@ class MealQuestionSerializer(serializers.ModelSerializer):
                   'answer_bool'
         ]
         read_only_fields = ['id']
+
+
+class MealUserSerializer(serializers.ModelSerializer):
+    """Serializer for MealUser"""
+
+    class Meta:
+        model = MealUser
+        fields = [
+            'id',
+            'is_allergy',
+            'is_unnecessary',
+            'answer_type',
+            'answer_choice',
+            'answer_int',
+            'answer_bool'
+        ]
