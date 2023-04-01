@@ -19,3 +19,15 @@ class MealQuestionViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """Retrieve meal question for authenticated user"""
         return self.queryset.filter(user=self.request.user).order_by('-id')
+
+
+class MealUserViewSet(viewsets.ModelViewSet):
+    """View for manage meal user APIs"""
+    serializer_class = serializers.MealUserSerializer
+    queryset = MealUser.objects.all()
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        """Retrieve meal user for authenticated user"""
+        return self.queryset.fileter(user=self.request.user).order_by('-id')
