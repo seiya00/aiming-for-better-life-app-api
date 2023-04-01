@@ -11,4 +11,12 @@ class MealQuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MealQuestion
-        fields = ['']
+        fields = ['id',
+                  'is_allergy',
+                  'is_unnecessary',
+                  'answer_type',
+                  'answer_choice',
+                  'answer_int',
+                  'answer_bool'
+        ]
+        read_only_fields = ['id']
