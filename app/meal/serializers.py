@@ -14,10 +14,9 @@ class MealQuestionSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'question',
-            'created_at'
         ]
 
-        read_only_fields = ['id', 'question', 'created_at']
+        read_only_fields = ['id']
 
 
 class MealUserSerializer(serializers.ModelSerializer):
@@ -27,7 +26,9 @@ class MealUserSerializer(serializers.ModelSerializer):
         model = MealUser
         fields = [
             'id',
+            'user',
             'meal_question',
+            'vegetable_question',
             'answer_type',
             'answer_choice',
             'answer_int',
@@ -36,8 +37,4 @@ class MealUserSerializer(serializers.ModelSerializer):
 
         read_only_fields = [
             'id',
-            'meal_question',
-            'answer_choice',
-            'answer_int',
-            'answer_bool'
         ]

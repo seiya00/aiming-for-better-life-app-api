@@ -8,9 +8,6 @@ from django.contrib.auth.models import (
     BaseUserManager,
     PermissionsMixin
 )
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
-
 
 
 class UserManager(BaseUserManager):
@@ -107,7 +104,7 @@ class MealUser(models.Model):
     )
     is_allergy = models.BooleanField(default=False)
     is_unnecessary = models.BooleanField(default=False)
-    answer_type = models.CharField(max_length=255) # フロントエンドで回答を送る時に裏で回答の種類を送信
+    answer_type = models.CharField(max_length=255) # フロントエンドで回答を送る時に裏で回答の種類も送信
     answer_choice = models.CharField(max_length=10, choices=HOW_MANY_CHOICES, null=True)
     answer_int = models.IntegerField(null=True)
     answer_bool = models.BooleanField(null=True)

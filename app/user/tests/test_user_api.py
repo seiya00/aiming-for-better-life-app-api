@@ -172,7 +172,7 @@ class PublicUserApiTests(TestCase):
             'password': 'tesTpass123',
             'first_name': '',
             'last_name': 'Test',
-            'gender': '男性'
+            'gender': 'チョコ'
         }
 
         res = self.client.post(CREATE_USER_URL, payload)
