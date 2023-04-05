@@ -14,6 +14,8 @@ from core.models import MealQuestion
 from meal.serializers import MealQuestionSerializer
 from meal.serializers import MealUserSerializer
 
+import json
+
 MEAL_QUESTION_URL = reverse('meal:mealquestion-list')
 MEAL_USER_URL = reverse('meal:mealuser-list')
 
@@ -116,23 +118,20 @@ class PrivateMealAPITests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
 
-    # def test_meal_user_table_limited_to_correct_user(self):
-    #     """Test MealUser object is limited to correct user"""
-    #     other_user = get_user_model().objects.create_user(
-    #         'other@example.com',
-    #         'otherPass123'
-    #     )
-    #     create_meal_user(
-    #         user=other_user,
-    #         meal_question=self.meal_question1,
-    #         answer_type='choice',
-    #         answer_choice='a lot'
-    #     )
+    def test_create_meal_user(self):
+        """Test crating meal user"""
+        payload = {
+            'meal_question': self.meal_question1,
+            'vegetable_question': 'null',
+            'answer_tyoe': 'boolean',
+            'answer_choice': 'null',
+            'answer_int': 'null',
+            'answer_bool': json.dumps(False)
+        }
+        res = self.client.post(MEAL_USER_URL, payload)
 
-    #     url = meal_user_url(self.meal_question1.id)
-    #     res = self.client.get(url)
-
-    #     meal_by_user = MealUser.objects.all().filter(user=self.user)
-    #     serializer = MealUserSerializer(meal_by_user, many=True)
-    #     self.assertEqual(res.status_code, status.HTTP_200_OK)
-    #     self.assertEqual(res.data, serializer.data)
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        meal_user = MealUser.objects.get(id=res.data['id'])
+        for k, v in payload.items():
+            self.assertEqual(getattr(meal_user, k), v)
+        self.assertEqual(meal_user.user, self.user)

@@ -42,6 +42,6 @@ class MealUserViewSet(viewsets.ModelViewSet):
     #     serializer = serializers.MealQuestionSerializer(questions, many=True)
     #     return Response(serializer.data)
 
-    # def perform_create(self, serializer):
-    #     """Save data"""
-    #     serializer.save(user=self.request.user)
+    def perform_create(self, serializer):
+        """Save data"""
+        serializer.save(user=self.request.user)
