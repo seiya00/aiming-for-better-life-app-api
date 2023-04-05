@@ -19,6 +19,4 @@ app_name = 'meal'
 
 urlpatterns = [
     path('', include(router.urls)),
-    # path('questions/', views.MealQuestionViewSet, name='meal-list'),
-    # path('me/', views.MealUserViewSet, name='meal-user')
 ]

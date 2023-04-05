@@ -82,7 +82,7 @@ class ModelTests(TestCase):
             user=user,
             meal_question=meal_question,
             answer_type='choice',
-            answer_choice='none'
+            answer_choice='a lot'
         )
 
-        self.assertEqual(str(meal), meal.answer_choice)
+        self.assertEqual(str(meal), meal.answer_type)

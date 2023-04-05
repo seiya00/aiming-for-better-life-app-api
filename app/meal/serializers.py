@@ -22,19 +22,19 @@ class MealQuestionSerializer(serializers.ModelSerializer):
 class MealUserSerializer(serializers.ModelSerializer):
     """Serializer for MealUser"""
 
+    meal_question=MealQuestionSerializer
+
     class Meta:
         model = MealUser
         fields = [
             'id',
-            'user',
             'meal_question',
             'vegetable_question',
             'answer_type',
             'answer_choice',
             'answer_int',
-            'answer_bool'
+            'answer_bool',
         ]
+        # fields = '__all__'
 
-        read_only_fields = [
-            'id',
-        ]
+        read_only_fields = ['id']

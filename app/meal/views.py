@@ -6,6 +6,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from core.models import MealQuestion, MealUser
 from meal import serializers
@@ -14,9 +15,9 @@ from meal import serializers
 class MealQuestionViewSet(viewsets.ReadOnlyModelViewSet):
     """View for manage meal question APIs"""
     serializer_class = serializers.MealQuestionSerializer
-    queryset = MealQuestion.objects.all()
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [IsAuthenticated]
+    queryset = MealQuestion.objects.all().order_by('-id')
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     # def list(self):
     #     """Retrieve meal question for authenticated user"""
@@ -32,8 +33,15 @@ class MealUserViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """Retrieve meal user for authenticated user"""
-        return self.queryset.fileter(user=self.request.user).order_by('-id')
+        return self.queryset.filter(user=self.request.user).order_by('-id')
 
-    def perform_create(self, serializer):
-        """Save data"""
-        serializer.save(user=self.request.user)
+    # @action(detail=True, methods=['get'])
+    # def questions(self, request, pk=None):
+    #     user = request.user
+    #     questions = MealQuestion.objects.all()
+    #     serializer = serializers.MealQuestionSerializer(questions, many=True)
+    #     return Response(serializer.data)
+
+    # def perform_create(self, serializer):
+    #     """Save data"""
+    #     serializer.save(user=self.request.user)
