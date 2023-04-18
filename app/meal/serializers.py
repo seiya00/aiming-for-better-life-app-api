@@ -22,7 +22,7 @@ class MealQuestionSerializer(serializers.ModelSerializer):
 class MealUserSerializer(serializers.ModelSerializer):
     """Serializer for MealUser"""
 
-    meal_question=MealQuestionSerializer
+    meal_question = MealQuestionSerializer
 
     class Meta:
         model = MealUser

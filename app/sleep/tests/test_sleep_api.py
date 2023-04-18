@@ -66,14 +66,14 @@ class PrivateSleepAPITests(TestCase):
         )
         self.client.force_authenticate(self.user)
         self.sleep_question1 = create_sleep_question('目覚めた時の気分は？')
-        self.sleep_user1 = create_sleep_user(
-            user=self.user,
-            sleep_question=self.sleep_question1,
-            answer_type='choice',
-            answer_choice='good',
-            answer_int=None,
-            answer_bool=None
-        )
+        # self.sleep_user1 = create_sleep_user(
+        #     user=self.user,
+        #     sleep_question=self.sleep_question1,
+        #     answer_type='choice',
+        #     answer_choice='good',
+        #     answer_int=None,
+        #     answer_bool=None
+        # )
 
     def test_retrieve_sleep_question(self):
         """Test retrieving sleep question"""
@@ -121,4 +121,4 @@ class PrivateSleepAPITests(TestCase):
         res = self.client.post(SLEEP_USER_URL, payload, format='json')
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        sleep_user = SL
+        sleep_user = SleepUser.objects.get(id=res.data['id'])
