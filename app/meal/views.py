@@ -28,7 +28,7 @@ class MealUserViewSet(viewsets.ModelViewSet):
     """View for manage meal user APIs"""
     serializer_class = serializers.MealUserSerializer
     queryset = MealUser.objects.all()
-    http_method_names = ['get', 'post', 'patch', 'delete']
+    http_method_names = ['get', 'post', 'patch']
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
