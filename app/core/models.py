@@ -63,7 +63,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class MealQuestion(models.Model): # Meal
     """Meal questions object"""
-    question = models.CharField(max_length=255, unique=True)
+    question = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -114,11 +114,30 @@ class MealUser(models.Model):
         return self.answer_type
 
 
-# class Sleep(models.Model):
-#     """Sleep object"""
-#     pass
+class SleepQuestion(models.Model):
+    """Sleep questions object"""
+    question = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.question
 
 
-# class SleepQuestion(models.Model):
-#     """Sleep questions object"""
-#     pass
+class SleepUser(models.Model):
+    """Sleep object"""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    sleep_question = models.ForeignKey(
+        SleepQuestion,
+        on_delete=models.CASCADE
+    )
+    answer_type = models.CharField(max_length=255)
+    answer_choice = models.CharField(max_length=10, null=True)
+    answer_int = models.IntegerField(null=True)
+    answer_bool = models.BooleanField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.answer_type

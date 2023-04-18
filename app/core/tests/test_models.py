@@ -78,11 +78,38 @@ class ModelTests(TestCase):
         meal_question = models.MealQuestion.objects.create(
             question='How many processed food did you ate yesterday'
         )
-        meal = models.MealUser.objects.create(
+        meal_user = models.MealUser.objects.create(
             user=user,
             meal_question=meal_question,
             answer_type='choice',
             answer_choice='a lot'
         )
 
-        self.assertEqual(str(meal), meal.answer_type)
+        self.assertEqual(str(meal_user), meal_user.answer_type)
+
+    # Test models about sleep
+    def test_create_sleep_question(self):
+        """Test creating a SleepQuestion successful"""
+        sleep_question = models.SleepQuestion.objects.create(
+            question='昨日の睡眠時間は何時間ですか？'
+        )
+
+        self.assertEqual(str(sleep_question), sleep_question.question)
+
+    def test_create_sleep_user(self):
+        """Test creating SleepUser successful"""
+        user = get_user_model().objects.create_user(
+            'test@example.com',
+            'tesTpass123'
+        )
+        sleep_question = models.SleepQuestion.objects.create(
+            question='昨日の睡眠時間は何時間ですか？'
+        )
+        sleep_user = models.SleepUser.objects.create(
+            user=user,
+            sleep_question=sleep_question,
+            answer_type='int',
+            answer_int=8,
+        )
+
+        self.assertEqual(str(sleep_user), sleep_user.answer_type)
