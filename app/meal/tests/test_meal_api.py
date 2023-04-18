@@ -19,9 +19,9 @@ import json
 MEAL_QUESTION_URL = reverse('meal:mealquestion-list')
 MEAL_USER_URL = reverse('meal:mealuser-list')
 
-def meal_user_url(meal_user_id):
+def detail_url(meal_user_id):
     """Create and return a MealUser URL"""
-    return reverse('meal:mealuser-list', args=[meal_user_id])
+    return reverse('meal:mealuser-detail', args=[meal_user_id])
 
 def create_meal_user(user, meal_question, vegetable_question, answer_type, answer_choice, answer_int, answer_bool):
     """Create and return a sample meal user"""
@@ -118,7 +118,7 @@ class PrivateMealAPITests(TestCase):
         self.assertEqual(res.data, serializer.data)
 
     def test_create_meal_user(self):
-        """Test crating meal user"""
+        """Test creating meal user"""
         payload = {
             # 'user': self.user.id,
             'meal_question': self.meal_question2.id,
@@ -138,3 +138,36 @@ class PrivateMealAPITests(TestCase):
             else:
                 self.assertEqual(getattr(meal_user, k), self.meal_question2)
         self.assertEqual(meal_user.user, self.user)
+
+    def test_partial_update(self):
+        """Test partial update of a mealUser"""
+        payload = {
+            'answer_bool': False
+        }
+        url = detail_url(self.meal_user1.id)
+        res = self.client.patch(url, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.meal_user1.refresh_from_db()
+        self.assertEqual(self.meal_user1.answer_bool, payload['answer_bool'])
+        self.assertEqual(self.meal_user1.meal_question, self.meal_question1)
+        self.assertEqual(self.meal_user1.user, self.user)
+        self.assertEqual(self.meal_user1.answer_type, 'boolean')
+
+    def test_update_user_returns_error(self):
+        """Test changing the user in mealUser results in error"""
+        other_user = get_user_model().objects.create_user(
+            email="other@example.com",
+            password="otherPass123",
+            first_name="other",
+            last_name="taro",
+            gender="male"
+        )
+
+        payload = {'user': other_user.id}
+        url = detail_url(self.meal_user1.id)
+        self.client.patch(url, payload)
+
+        self.meal_user1.refresh_from_db()
+        self.assertEqual(self.meal_user1.user, self.user)
+
