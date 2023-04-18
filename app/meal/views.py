@@ -35,13 +35,6 @@ class MealUserViewSet(viewsets.ModelViewSet):
         """Retrieve meal user for authenticated user"""
         return self.queryset.filter(user=self.request.user).order_by('-id')
 
-    # @action(detail=True, methods=['get'])
-    # def questions(self, request, pk=None):
-    #     user = request.user
-    #     questions = MealQuestion.objects.all()
-    #     serializer = serializers.MealQuestionSerializer(questions, many=True)
-    #     return Response(serializer.data)
-
     def perform_create(self, serializer):
         """Save data"""
         serializer.save(user=self.request.user)

@@ -35,6 +35,10 @@ class MealUserSerializer(serializers.ModelSerializer):
             'answer_int',
             'answer_bool',
         ]
-        # fields = '__all__'
 
         read_only_fields = ['id']
+
+    def create(self, validated_data):
+        """Create a meal user"""
+        meal_user = MealUser.objects.create(**validated_data)
+        return meal_user

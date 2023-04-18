@@ -61,9 +61,13 @@ class PrivateMealAPITests(TestCase):
 
     def setUp(self):
         self.client = APIClient()
+        # You need to provide first_name, last_name etc...
         self.user = get_user_model().objects.create_user(
-            'user1@example.com',
-            'Testpass123'
+            email='user1@example.com',
+            password='userPass123',
+            first_name='test',
+            last_name='taro',
+            gender='female'
         )
         self.client.force_authenticate(self.user)
         self.meal_question1 = create_meal_question('ついつい食べ過ぎてしまいますか？')
@@ -75,16 +79,8 @@ class PrivateMealAPITests(TestCase):
             answer_type='boolean',
             answer_choice=None,
             answer_int=None,
-            answer_bool='True'
+            answer_bool=True
         )
-        # self.meal_user2 = create_meal_user(
-        #     user=self.user,
-        #     meal_question=self.meal_question2,
-        #     answer_type='choice',
-        #     answer_choice='normal',
-        #     answer_int=None,
-        #     answer_bool=None
-        # )
 
     def test_retrieve_meal_question(self):
         """Test retrieving meal question one by one"""
@@ -98,8 +94,11 @@ class PrivateMealAPITests(TestCase):
     def test_retrieve_correct_meal_user(self):
         """Test retrieving meal user"""
         other_user = get_user_model().objects.create_user(
-            'other1@example.com',
-            'Otherpass123'
+            email='other@example.com',
+            password='otherPass123',
+            first_name='test',
+            last_name='taro',
+            gender='male'
         )
         create_meal_user(
             user=other_user,
@@ -121,17 +120,21 @@ class PrivateMealAPITests(TestCase):
     def test_create_meal_user(self):
         """Test crating meal user"""
         payload = {
-            'meal_question': self.meal_question1,
-            'vegetable_question': 'null',
-            'answer_tyoe': 'boolean',
-            'answer_choice': 'null',
-            'answer_int': 'null',
-            'answer_bool': json.dumps(False)
+            # 'user': self.user.id,
+            'meal_question': self.meal_question2.id,
+            'vegetable_question': None,
+            'answer_type': 'boolean',
+            'answer_choice': None,
+            'answer_int': None,
+            'answer_bool': False
         }
-        res = self.client.post(MEAL_USER_URL, payload)
+        res = self.client.post(MEAL_USER_URL, payload, format='json')
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         meal_user = MealUser.objects.get(id=res.data['id'])
         for k, v in payload.items():
-            self.assertEqual(getattr(meal_user, k), v)
+            if not k == 'meal_question':
+                self.assertEqual(getattr(meal_user, k), v)
+            else:
+                self.assertEqual(getattr(meal_user, k), self.meal_question2)
         self.assertEqual(meal_user.user, self.user)
