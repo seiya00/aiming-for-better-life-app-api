@@ -21,6 +21,10 @@ from sleep.serializers import (
 SLEEP_QUESTION_URL = reverse('sleep:sleepquestion-list')
 SLEEP_USER_URL = reverse('sleep:sleepuser-list')
 
+def sleep_user_detail_url(sleep_user_id):
+    """Create and return a SleepUser URL"""
+    return reverse('sleep:sleepuser-detail', args=[sleep_user_id])
+
 def create_sleep_user(user, sleep_question, answer_type, answer_choice, answer_int, answer_bool):
     """Create and return a smaple sleep user"""
     sleep_user = SleepUser.objects.create(
@@ -66,14 +70,14 @@ class PrivateSleepAPITests(TestCase):
         )
         self.client.force_authenticate(self.user)
         self.sleep_question1 = create_sleep_question('目覚めた時の気分は？')
-        # self.sleep_user1 = create_sleep_user(
-        #     user=self.user,
-        #     sleep_question=self.sleep_question1,
-        #     answer_type='choice',
-        #     answer_choice='good',
-        #     answer_int=None,
-        #     answer_bool=None
-        # )
+        self.sleep_user1 = create_sleep_user(
+            user=self.user,
+            sleep_question=self.sleep_question1,
+            answer_type='choice',
+            answer_choice='good',
+            answer_int=None,
+            answer_bool=None
+        )
 
     def test_retrieve_sleep_question(self):
         """Test retrieving sleep question"""
@@ -128,3 +132,35 @@ class PrivateSleepAPITests(TestCase):
             else:
                 self.assertEqual(getattr(sleep_user, k), v)
         self.assertEqual(sleep_user.user, self.user)
+
+    def test_partial_update(self):
+        """Test partial update of a sleepUser"""
+        payload = {
+            'answer_choice': 'bad'
+        }
+        url = sleep_user_detail_url(self.sleep_user1.id)
+        res = self.client.patch(url, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.sleep_user1.refresh_from_db()
+        self.assertEqual(self.sleep_user1.answer_choice, payload['answer_choice'])
+        self.assertEqual(self.sleep_user1.sleep_question, self.sleep_question1)
+        self.assertEqual(self.sleep_user1.user, self.user)
+        self.assertEqual(self.sleep_user1.answer_type, 'choice')
+
+    def test_update_user_returns_error(self):
+        """Test changing the user in SleepUser results in error"""
+        other_user = get_user_model().objects.create_user(
+            email='other@example.com',
+            password='otherPassword123',
+            first_name='taro',
+            last_name="test",
+            gender='male',
+        )
+
+        payload = {'user': other_user.id}
+        url = sleep_user_detail_url(self.sleep_user1.id)
+        self.client.patch(url, payload)
+
+        self.sleep_user1.refresh_from_db()
+        self.assertEqual(self.sleep_user1.user, self.user)
