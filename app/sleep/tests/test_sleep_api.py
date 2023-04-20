@@ -122,3 +122,9 @@ class PrivateSleepAPITests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         sleep_user = SleepUser.objects.get(id=res.data['id'])
+        for k, v in payload.items():
+            if k == 'sleep_question':
+                self.assertEqual(getattr(sleep_user, k), self.sleep_question1)
+            else:
+                self.assertEqual(getattr(sleep_user, k), v)
+        self.assertEqual(sleep_user.user, self.user)

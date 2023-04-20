@@ -30,4 +30,5 @@ urlpatterns = [
     ),
     path('api/user/', include('user.urls')),
     path('api/meal/', include('meal.urls')),
+    path('api/sleep/', include('sleep.urls')),
 ]
