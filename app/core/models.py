@@ -141,3 +141,26 @@ class SleepUser(models.Model):
 
     def __str__(self):
         return self.answer_type
+
+
+class ExerciseQuestion(models.Model):
+    """Exercise questions object"""
+    question = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class ExerciseUser(models.Model):
+    """Exercise user object"""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    exercise_question = models.ForeignKey(
+        ExerciseQuestion,
+        on_delete=models.CASCADE
+    )
+    answer_type = models.CharField(max_length=255)
+    answer_choice = models.CharField(max_length=10, null=True)
+    answer_int = models.IntegerField(null=True)
+    answer_bool = models.BooleanField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
