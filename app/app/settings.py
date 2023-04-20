@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'user',
     'meal',
-    'sleep'
+    'sleep',
+    'exercise',
 ]
 
 MIDDLEWARE = [
