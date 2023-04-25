@@ -21,8 +21,7 @@ class AdminSiteTests(TestCase):
             email='user@example.com',
             password='tesTpass123',
             first_name='test',
-            last_name='taro',
-            gender='male',
+            gender='男性',
         )
 
     def test_users_list(self):
@@ -31,7 +30,6 @@ class AdminSiteTests(TestCase):
         res = self.client.get(url)
 
         self.assertContains(res, self.user.first_name)
-        self.assertContains(res, self.user.last_name)
         self.assertContains(res, self.user.get_gender_display())
         self.assertContains(res, self.user.email)
 

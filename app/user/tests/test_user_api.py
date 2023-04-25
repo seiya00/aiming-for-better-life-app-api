@@ -33,8 +33,7 @@ class PublicUserApiTests(TestCase):
             'email': 'test@example.com',
             'password': 'tesTpass123',
             'first_name': 'Taro',
-            'last_name': 'Test',
-            'gender': 'male',
+            'gender': '男性',
         }
         res = self.client.post(CREATE_USER_URL, payload)
 
@@ -49,8 +48,7 @@ class PublicUserApiTests(TestCase):
             'email': 'test@example.com',
             'password': 'tesTpass123',
             'first_name': 'Taro',
-            'last_name': 'Test',
-            'gender': 'female'
+            'gender': '女性'
         }
         create_user(**payload)
         res = self.client.post(CREATE_USER_URL, payload)
@@ -63,8 +61,7 @@ class PublicUserApiTests(TestCase):
             'email': 'test@example.com',
             'password': 'te',
             'first_name': 'Taro',
-            'last_name': 'Test',
-            'gender': 'other'
+            'gender': '男性'
         }
         # create_user(**payload) this isn't good
         res = self.client.post(CREATE_USER_URL, payload)
@@ -81,8 +78,7 @@ class PublicUserApiTests(TestCase):
             'email': 'test@example.com',
             'password': 'testpass123',
             'first_name': 'Taro',
-            'last_name': 'Test',
-            'gender': 'male'
+            'gender': '女性'
         }
 
         res = self.client.post(CREATE_USER_URL, payload)
@@ -99,8 +95,7 @@ class PublicUserApiTests(TestCase):
             'email': 'test@example.com',
             'password': 'tesTpass',
             'first_name': 'Taro',
-            'last_name': 'Test',
-            'gender': 'male'
+            'gender': '男性'
         }
 
         res = self.client.post(CREATE_USER_URL, payload)
@@ -117,26 +112,7 @@ class PublicUserApiTests(TestCase):
             'email': 'test@example.com',
             'password': 'tesTpass123',
             'first_name': 'Taro',
-            'last_name': 'Test',
             'gender': '',
-        }
-
-        res = self.client.post(CREATE_USER_URL, payload)
-
-        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-        user_exists = get_user_model().objects.filter(
-            email=payload['email']
-        ).exists()
-        self.assertFalse(user_exists)
-
-    def test_user_with_lastname_is_required_error(self):
-        """Test an error is returned if last_name is blank"""
-        payload = {
-            'email': 'test@example.com',
-            'password': 'tesTpass123',
-            'first_name': 'Taro',
-            'last_name': '',
-            'gender': 'male'
         }
 
         res = self.client.post(CREATE_USER_URL, payload)
@@ -153,8 +129,7 @@ class PublicUserApiTests(TestCase):
             'email': 'test@example.com',
             'password': 'tesTpass123',
             'first_name': '',
-            'last_name': 'Test',
-            'gender': 'male'
+            'gender': '男性'
         }
 
         res = self.client.post(CREATE_USER_URL, payload)
@@ -171,8 +146,7 @@ class PublicUserApiTests(TestCase):
             'email': 'test@example.com',
             'password': 'tesTpass123',
             'first_name': '',
-            'last_name': 'Test',
-            'gender': 'チョコ'
+            'gender': 'male'
         }
 
         res = self.client.post(CREATE_USER_URL, payload)
@@ -189,8 +163,7 @@ class PublicUserApiTests(TestCase):
         """Test generates token for valid credentials"""
         user_details = {
             'first_name': 'Test',
-            'last_name': 'Taro',
-            'gender': 'male',
+            'gender': '男性',
             'email': 'test@example.com',
             'password': 'tesTpass123',
         }
@@ -246,8 +219,7 @@ class PrivateUserApiTests(TestCase):
             email='test@example.com',
             password='tesTpas123',
             first_name='Taro',
-            last_name='Test',
-            gender='male'
+            gender='女性'
         )
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
@@ -260,7 +232,6 @@ class PrivateUserApiTests(TestCase):
         self.assertEqual(res.data, {
             'email': self.user.email,
             'first_name': self.user.first_name,
-            'last_name': self.user.last_name,
             'gender': self.user.gender
         })
 

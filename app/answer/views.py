@@ -1,5 +1,5 @@
 """
-Views for the Meal APIs
+Views for the answer APIs
 """
 from rest_framework import viewsets, generics
 from rest_framework.authentication import TokenAuthentication
@@ -8,26 +8,14 @@ from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from core.models import MealQuestion, MealUser
-from meal import serializers
+from core.models import Answer
+from answer import serializers
 
 
-class MealQuestionViewSet(viewsets.ReadOnlyModelViewSet):
-    """View for manage meal question APIs"""
-    serializer_class = serializers.MealQuestionSerializer
-    queryset = MealQuestion.objects.all().order_by('-id')
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    # def list(self):
-    #     """Retrieve meal question for authenticated user"""
-    #     return self.queryset.order_by('-id')
-
-
-class MealUserViewSet(viewsets.ModelViewSet):
+class AnswerViewSet(viewsets.ModelViewSet):
     """View for manage meal user APIs"""
-    serializer_class = serializers.MealUserSerializer
-    queryset = MealUser.objects.all()
+    serializer_class = serializers.AnswerSerializer
+    queryset = Answer.objects.all()
     http_method_names = ['get', 'post', 'patch']
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]

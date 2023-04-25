@@ -1,5 +1,5 @@
 """
-URL mappings for the meal app
+URL mappings for the answer app
 """
 from django.urls import (
     path,
@@ -8,14 +8,13 @@ from django.urls import (
 
 from rest_framework.routers import DefaultRouter
 
-from meal import views
+from answer import views
 
 
 router = DefaultRouter()
-router.register('questions', views.MealQuestionViewSet)
-router.register('me', views.MealUserViewSet)
+router.register('answer', views.AnswerViewSet)
 
-app_name = 'meal'
+app_name = 'answer'
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -50,66 +50,39 @@ class ModelTests(TestCase):
         self.assertTrue(user.is_superuser)
         self.assertTrue(user.is_staff)
 
-    # Test models about Meal
-    def test_create_meal_question(self):
+    # Test Answer model
+    def test_create_question(self):
         """Test creating a MealQuestion is successful"""
-        meal_question = models.MealQuestion.objects.create(
+        questions = models.Questions.objects.create(
             question='How many processed food did you ate yesterday'
         )
 
-        self.assertEqual(str(meal_question), meal_question.question)
+        self.assertEqual(str(questions), questions.question)
 
     def test_create_vegetable(self):
         """Test creating vegetable is successful"""
-        vegetable = models.MealVegetable.objects.create(
+        vegetables = models.Vegetable.objects.create(
             vegetable='トマト',
             color='赤',
             varieties='果菜類'
         )
 
-        self.assertEqual(str(vegetable), vegetable.vegetable)
+        self.assertEqual(str(vegetables), vegetables.vegetable)
 
-    def test_create_meal_user(self):
+    def test_create_answer(self):
         """Test creating MealUser is successful"""
         user = get_user_model().objects.create_user(
             'test@example.com',
             'tesTpass123'
         )
-        meal_question = models.MealQuestion.objects.create(
+        question = models.Questions.objects.create(
             question='How many processed food did you ate yesterday'
         )
-        meal_user = models.MealUser.objects.create(
+        answer = models.Answer.objects.create(
             user=user,
-            meal_question=meal_question,
+            question=question,
             answer_type='choice',
             answer_choice='a lot'
         )
 
-        self.assertEqual(str(meal_user), meal_user.answer_type)
-
-    # Test models about sleep
-    def test_create_sleep_question(self):
-        """Test creating a SleepQuestion successful"""
-        sleep_question = models.SleepQuestion.objects.create(
-            question='昨日の睡眠時間は何時間ですか？'
-        )
-
-        self.assertEqual(str(sleep_question), sleep_question.question)
-
-    def test_create_sleep_user(self):
-        """Test creating SleepUser successful"""
-        user = get_user_model().objects.create_user(
-            'test@example.com',
-            'tesTpass123'
-        )
-        sleep_question = models.SleepQuestion.objects.create(
-            question='昨日の睡眠時間は何時間ですか？'
-        )
-        sleep_user = models.SleepUser.objects.create(
-            user=user,
-            sleep_question=sleep_question,
-            answer_type='int',
-            answer_int=8,
-        )
-
-        self.assertEqual(str(sleep_user), sleep_user.answer_type)
+        self.assertEqual(str(answer), answer.answer_type)

@@ -11,10 +11,10 @@ from core import models
 class UserAdmin(BaseUserAdmin):
     """Define the admin pages for users"""
     ordering = ['id']
-    list_display = ['email', 'first_name', 'last_name', 'gender']
+    list_display = ['email', 'first_name', 'gender']
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        (_('Personal Info'), {'fields': ('first_name', 'last_name', 'gender')}),
+        (_('Personal Info'), {'fields': ('first_name', 'gender')}),
         (
             _('Permissions'),
             {
@@ -37,7 +37,6 @@ class UserAdmin(BaseUserAdmin):
                 'password1',
                 'password2',
                 'first_name',
-                'last_name',
                 'gender',
                 'is_active',
                 'is_staff',
@@ -47,9 +46,14 @@ class UserAdmin(BaseUserAdmin):
         }),
     )
 
+
+class QuestionsAdmin(admin.ModelAdmin):
+    """Define the admin pages for questions model"""
+    ordering = ['id']
+    list_display = ['question', 'question_type', 'answer_type', 'answer1', 'answer2', 'answer3', 'answer4']
+
+
 admin.site.register(models.User, UserAdmin)
-admin.site.register(models.MealQuestion)
-admin.site.register(models.MealVegetable)
-admin.site.register(models.MealUser)
-admin.site.register(models.SleepQuestion)
-admin.site.register(models.SleepUser)
+admin.site.register(models.Questions)
+admin.site.register(models.Vegetable)
+admin.site.register(models.Answer)

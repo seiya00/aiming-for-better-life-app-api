@@ -36,20 +36,17 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     """User in the system"""
     GENDER_CHOICES = [
-        ('male', '男性'),
-        ('female', '女性'),
-        ('other', '回答なし')
+        ('男性', '男性'),
+        ('女性', '女性')
     ]
     email = models.EmailField(max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
     # birth_date = models.DateField(null=False)
-    # user_name = models.CharField(max_length=255, unique=True)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
-    created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_family = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     objects = UserManager()
 
@@ -61,16 +58,21 @@ class User(AbstractBaseUser, PermissionsMixin):
 #     pass
 
 
-class MealQuestion(models.Model): # Meal
-    """Meal questions object"""
-    question = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
+class Questions(models.Model):
+    """Questions object"""
+    question = models.CharField(max_length=50)
+    question_type = models.CharField(max_length=10)
+    answer_type = models.CharField(max_length=10)
+    answer1 = models.CharField(max_length=10, null=True)
+    answer2 = models.CharField(max_length=10, null=True)
+    answer3 = models.CharField(max_length=10, null=True)
+    answer4 = models.CharField(max_length=10, null=True)
 
     def __str__(self):
         return self.question
 
 
-class MealVegetable(models.Model):
+class Vegetable(models.Model):
     """Vegetable object"""
     vegetable = models.CharField(max_length=255, unique=True)
     color = models.CharField(max_length=255)
@@ -80,60 +82,25 @@ class MealVegetable(models.Model):
         return self.vegetable
 
 
-class MealUser(models.Model):
-    """Meal object"""
-    HOW_MANY_CHOICES = [
-        ('none', '無し'),
-        ('a bit', '少し'),
-        ('normal', '普通'),
-        ('a lot', 'たくさん')
-    ]
+class Answer(models.Model):
+    """Answer object"""
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
     )
-    meal_question = models.ForeignKey(
-        MealQuestion,
+    question = models.ForeignKey(
+        Questions,
         on_delete=models.CASCADE,
         null=True
     )
-    vegetable_question = models.ForeignKey(
-        MealVegetable,
+    vegetable = models.ForeignKey(
+        Vegetable,
         on_delete=models.CASCADE,
         null=True
     )
     is_allergy = models.BooleanField(default=False)
     is_unnecessary = models.BooleanField(default=False)
     answer_type = models.CharField(max_length=255)
-    answer_choice = models.CharField(max_length=10, choices=HOW_MANY_CHOICES, null=True)
-    answer_int = models.IntegerField(null=True)
-    answer_bool = models.BooleanField(null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.answer_type
-
-
-class SleepQuestion(models.Model):
-    """Sleep questions object"""
-    question = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.question
-
-
-class SleepUser(models.Model):
-    """Sleep object"""
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE
-    )
-    sleep_question = models.ForeignKey(
-        SleepQuestion,
-        on_delete=models.CASCADE
-    )
-    answer_type = models.CharField(max_length=255)
     answer_choice = models.CharField(max_length=10, null=True)
     answer_int = models.IntegerField(null=True)
     answer_bool = models.BooleanField(null=True)
@@ -141,26 +108,3 @@ class SleepUser(models.Model):
 
     def __str__(self):
         return self.answer_type
-
-
-class ExerciseQuestion(models.Model):
-    """Exercise questions object"""
-    question = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-
-class ExerciseUser(models.Model):
-    """Exercise user object"""
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE
-    )
-    exercise_question = models.ForeignKey(
-        ExerciseQuestion,
-        on_delete=models.CASCADE
-    )
-    answer_type = models.CharField(max_length=255)
-    answer_choice = models.CharField(max_length=10, null=True)
-    answer_int = models.IntegerField(null=True)
-    answer_bool = models.BooleanField(null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
