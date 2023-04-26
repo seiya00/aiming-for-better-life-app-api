@@ -15,6 +15,8 @@ class QuestionsSerializer(serializers.ModelSerializer):
             'id',
             'question',
             'question_type',
+            'answer_type',
+            'is_neccessary',
             'answer1',
             'answer2',
             'answer3',

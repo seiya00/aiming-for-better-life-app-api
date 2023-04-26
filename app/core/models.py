@@ -10,6 +10,32 @@ from django.contrib.auth.models import (
 )
 
 
+ANSWER_CHOICES = [
+    ('選択式', '選択'),
+    ('真偽値', '真偽'),
+    ('数字', '数字')
+]
+QUESTION_CHOICES = [
+    ('食事', '食事'),
+    ('運動', '運動'),
+    ('睡眠', '睡眠')
+]
+ANSWER1_CHOICES = [
+    ('ゼロ', 'ゼロ'),
+    (True, 'はい'),
+]
+ANSWER2_CHOICES = [
+    ('少し', '少し'),
+    (False, 'いいえ'),
+]
+ANSWER3_CHOICES = [
+    ('まあまあ', 'まあまあ'),
+]
+ANSWER4_CHOICES = [
+    ('たくさん', 'たくさん'),
+]
+
+
 class UserManager(BaseUserManager):
     """Manager for users"""
 
@@ -61,12 +87,13 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Questions(models.Model):
     """Questions object"""
     question = models.CharField(max_length=50)
-    question_type = models.CharField(max_length=10)
-    answer_type = models.CharField(max_length=10)
-    answer1 = models.CharField(max_length=10, null=True)
-    answer2 = models.CharField(max_length=10, null=True)
-    answer3 = models.CharField(max_length=10, null=True)
-    answer4 = models.CharField(max_length=10, null=True)
+    question_type = models.CharField(max_length=10, choices=QUESTION_CHOICES)
+    answer_type = models.CharField(max_length=10, choices=ANSWER_CHOICES)
+    is_neccessary = models.BooleanField(default=True)
+    answer1 = models.CharField(max_length=10, blank=True, choices=ANSWER1_CHOICES)
+    answer2 = models.CharField(max_length=10, blank=True, choices=ANSWER2_CHOICES)
+    answer3 = models.CharField(max_length=10, blank=True, choices=ANSWER3_CHOICES)
+    answer4 = models.CharField(max_length=10, blank=True, choices=ANSWER4_CHOICES)
 
     def __str__(self):
         return self.question
@@ -100,7 +127,7 @@ class Answer(models.Model):
     )
     is_allergy = models.BooleanField(default=False)
     is_unnecessary = models.BooleanField(default=False)
-    answer_type = models.CharField(max_length=255)
+    answer_type = models.CharField(max_length=10, choices=ANSWER_CHOICES)
     answer_choice = models.CharField(max_length=10, null=True)
     answer_int = models.IntegerField(null=True)
     answer_bool = models.BooleanField(null=True)

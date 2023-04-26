@@ -12,7 +12,7 @@ from question import views
 
 
 router = DefaultRouter()
-router.register('questions', views.QuestionsViewSet)
+router.register('', views.QuestionsViewSet)
 
 app_name = 'question'
 
