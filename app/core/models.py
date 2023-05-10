@@ -8,6 +8,7 @@ from django.contrib.auth.models import (
     BaseUserManager,
     PermissionsMixin
 )
+from django.core.exceptions import ValidationError
 
 
 ANSWER_CHOICES = [
@@ -20,20 +21,52 @@ QUESTION_CHOICES = [
     ('運動', '運動'),
     ('睡眠', '睡眠')
 ]
-ANSWER1_CHOICES = [
+ANSWER1_CHOICE_CHOICES = [
     ('ゼロ', 'ゼロ'),
+    ('だるい', 'だるい'),
+]
+ANSWER2_CHOICE_CHOICES = [
+    ('少し', '少し'),
+    ('少しだるい', '少しだるい'),
+    ('１〜２回', '１〜２回'),
+]
+ANSWER3_CHOICE_CHOICES = [
+    ('まあまあ', 'まあまあ'),
+    ('普通', '普通'),
+    ('３回以上', '３回以上'),
+]
+ANSWER4_CHOICE_CHOICES = [
+    ('たくさん', 'たくさん'),
+    ('良い', '良い'),
+]
+
+ANSWER1_BOOL_CHOICES = [
     (True, 'はい'),
 ]
-ANSWER2_CHOICES = [
-    ('少し', '少し'),
+
+ANSWER2_BOOL_CHOICES = [
     (False, 'いいえ'),
 ]
-ANSWER3_CHOICES = [
-    ('まあまあ', 'まあまあ'),
-]
-ANSWER4_CHOICES = [
-    ('たくさん', 'たくさん'),
-]
+
+# def validate_contains_for_answer1(value):
+#     """Check validation of answer1 field"""
+#     if "ゼロ" or True not in value:
+#         raise ValidationError("The value must contain 'ゼロ' or True")
+
+# def validate_contains_for_answer1(value):
+#     """Check validation of answer1 field"""
+#     if "少し" or False not in value:
+#         raise ValidationError("The value must contain '少し' or False")
+
+# def validate_contains_for_answer1(value):
+#     """Check validation of answer1 field"""
+#     if "まあまあ" not in value:
+#         raise ValidationError('The value must contain \'まあまあ\'')
+
+# def validate_contains_for_answer1(value):
+#     """Check validation of answer1 field"""
+#     if "たくさん" not in value:
+#         raise ValidationError("The value must contain 'たくさん'")
 
 
 class UserManager(BaseUserManager):
@@ -90,10 +123,13 @@ class Questions(models.Model):
     question_type = models.CharField(max_length=10, choices=QUESTION_CHOICES)
     answer_type = models.CharField(max_length=10, choices=ANSWER_CHOICES)
     is_neccessary = models.BooleanField(default=True)
-    answer1 = models.CharField(max_length=10, blank=True, choices=ANSWER1_CHOICES)
-    answer2 = models.CharField(max_length=10, blank=True, choices=ANSWER2_CHOICES)
-    answer3 = models.CharField(max_length=10, blank=True, choices=ANSWER3_CHOICES)
-    answer4 = models.CharField(max_length=10, blank=True, choices=ANSWER4_CHOICES)
+    answer1_choice = models.CharField(max_length=10, blank=True, choices=ANSWER1_CHOICE_CHOICES)
+    answer2_choice = models.CharField(max_length=10, blank=True, choices=ANSWER2_CHOICE_CHOICES)
+    answer3_choice = models.CharField(max_length=10, blank=True, choices=ANSWER3_CHOICE_CHOICES)
+    answer4_choice = models.CharField(max_length=10, blank=True, choices=ANSWER4_CHOICE_CHOICES)
+    answer1_bool = models.BooleanField(null=True, blank=True, choices=ANSWER1_BOOL_CHOICES)
+    answer2_bool = models.BooleanField(null=True, blank=True, choices=ANSWER2_BOOL_CHOICES)
+
 
     def __str__(self):
         return self.question
@@ -131,7 +167,7 @@ class Answer(models.Model):
     answer_choice = models.CharField(max_length=10, null=True)
     answer_int = models.IntegerField(null=True)
     answer_bool = models.BooleanField(null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.answer_type

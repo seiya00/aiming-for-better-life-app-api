@@ -19,9 +19,10 @@ class AnswerSerializer(serializers.ModelSerializer):
             'answer_choice',
             'answer_int',
             'answer_bool',
+            'created_at',
         ]
 
-        read_only_fields = ['id']
+        read_only_fields = ['id', 'created_at']
 
     def create(self, validated_data):
         """Create a meal user"""

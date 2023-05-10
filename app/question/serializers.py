@@ -17,10 +17,12 @@ class QuestionsSerializer(serializers.ModelSerializer):
             'question_type',
             'answer_type',
             'is_neccessary',
-            'answer1',
-            'answer2',
-            'answer3',
-            'answer4'
+            'answer1_choice',
+            'answer2_choice',
+            'answer3_choice',
+            'answer4_choice',
+            'answer1_bool',
+            'answer2_bool'
         ]
 
         read_only_fields = ['id']

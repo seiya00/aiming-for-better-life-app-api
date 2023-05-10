@@ -1,15 +1,22 @@
 """
 Views for the answer APIs
 """
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, generics, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from django.http import JsonResponse
+
 from core.models import Answer
 from answer import serializers
+from datetime import date, timedelta
+
+def is_user_has_already_answered_the_question_today(user, question_id):
+    today = date.today()
+    return Answer.objects.filter(user=user, question__id=question_id, created_at=today).exists()
 
 
 class AnswerViewSet(viewsets.ModelViewSet):
@@ -20,9 +27,34 @@ class AnswerViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        """Retrieve meal user for authenticated user"""
-        return self.queryset.filter(user=self.request.user).order_by('-id')
+    def create(self, request, *args, **kwargs):
+        user = request.user
+        question_id = request.POST.get('question', None)
+        if question_id is not None:
+            if is_user_has_already_answered_the_question_today(user, question_id):
+                return JsonResponse({'error': 'You can only answer the question once per day'}, status=status.HTTP_400_BAD_REQUEST)
+            serializer = self.get_serializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save(user=user)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['get'])
+    def yesterday(self, request, *args, **kwargs):
+        """Filter data to retrieve only yesterday's data"""
+        queryset = self.get_queryset().filter(created_at=date.today() - timedelta(days=1))
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'])
+    def week(self, request, *args, **kwargs):
+        # 一週間分のデータをフィルタリングするロジック
+        today = date.today()
+        one_week_age = today - timedelta(days=7)
+        meal_questions = self.get_queryset().filter(question__question_type='食事', created_at__range=(one_week_age, today))
+        serializer = self.get_serializer(meal_questions, many=True)
+        return Response(serializer.data)
 
     def perform_create(self, serializer):
         """Save data"""
