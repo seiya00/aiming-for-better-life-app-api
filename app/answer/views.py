@@ -9,8 +9,9 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 
-from core.models import Answer
+from core.models import Answer, Questions
 from answer import serializers
 from datetime import date, timedelta
 
@@ -28,17 +29,20 @@ class AnswerViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
-        user = request.user
-        question_id = request.POST.get('question', None)
+        user = self.request.user
+        question_id = self.request.data.get('question', None)
         if question_id is not None:
+            question = get_object_or_404(Questions, pk=question_id)
             if is_user_has_already_answered_the_question_today(user, question_id):
                 return JsonResponse({'error': 'You can only answer the question once per day'}, status=status.HTTP_400_BAD_REQUEST)
             serializer = self.get_serializer(data=request.data)
             if serializer.is_valid():
-                serializer.save(user=user)
+                serializer.save(user=user, question=question)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'error': 'Invalid request. question_id is missing.'}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['get'])
     def yesterday(self, request, *args, **kwargs):
